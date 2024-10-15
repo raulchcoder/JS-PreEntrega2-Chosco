@@ -1,0 +1,28 @@
+#main {
+  .card {
+    min-height: 100%;
+  }
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    &__precio {
+      margin: auto;
+      margin-left: 0;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  }
+  img.card-img-top {
+    height: 18rem;
+    object-fit: cover;
+    object-position: center;
+  } /* img */
+}
+
+@media (width >= 768px) {
+  #main {
+    img.card-img-top {
+      height: 12rem;
+    } /* img */
+  }
+}

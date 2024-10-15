@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+   <link rel="stylesheet" href="./assets/bootstrap/bootstrap.min.css">
+   <link rel="stylesheet" href="./css/app.css">
+   <title>Pimienta y Sal</title>
+</head>
+<body>
+   <header class="header-principal">
+      <section class="header">
+         <div class="header__logo">
+            <img src="./img/logo.png" alt="logo de pimienta">
+         </div>
+         <div class="header__titulo">
+            <h2 class="text-center">Pimienta y Sal</h2>
+         </div>
+         <div class="header__carrito text-center">
+            <!-- <span class="header__carrito-icon"><i class="fa-solid fa-cart-shopping fa-beat"></i><i
+                  class="header__carrito-cantidad fa-solid fa-beat" id="carrito-cantidad">0</i></span> -->
+            <a href="./pages/carrito.html" class="btn position-relative">
+               <i class="fa-solid fa-cart-shopping"></i>
+               <span class="position-absolute top-0 translate-middle badge rounded-circle bg-dark"
+                  id="carrito-cantidad">0
+                  <span class="visually-hidden">unread messages</span>
+               </span>
+            </a>
+         </div>
+      </section>
+
+      <nav class="navbar navbar-expand-md bg-body-tertiary">
+         <div class="container">
+            <a class="navbar-brand m-auto d-md-none fw-bold" href="#">Pimienta y Sal</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+               aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+               <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+
+               <ul class="navbar-nav" id="navbar-contenedor">
+
+                  <!-- <li class="nav-item">
+                     <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="categoria1">
+                        <label class="form-check-label" for="categoria1">
+                           Default checkbox
+                        </label>
+                     </div>
+                  </li>
+                  <li class="nav-item">
+                     <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="categoria2">
+                        <label class="form-check-label" for="categoria2">
+                           Default checkbox
+                        </label>
+                     </div>
+                  </li>
+                  <li class="nav-item">
+                     <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="categoria3">
+                        <label class="form-check-label" for="categoria3">
+                           Default checkbox
+                        </label>
+                     </div>
+                  </li>
+                  <li class="nav-item">
+                     <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="categoria4">
+                        <label class="form-check-label" for="categoria4">
+                           Default checkbox
+                        </label>
+                     </div>
+                  </li> -->
+
+               </ul>
+            </div>
+         </div>
+      </nav>
+   </header>
+
+   <main class="container main" id="main">
+      <div class="row justify-content-center" id="row-productos">
+
+         <!-- <div class="col-12 col-md-6 col-lg-4 col-xl-3 g-4 bg-info">
+            <div class="card mx-auto">
+               <img class="card-img-top" src="./img/bife_criolla.jpg" alt="Card image cap">
+               <div class="card-body">
+                  <h5 class="card-title">Card title</h5>
+                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                     card's
+                     content.</p>
+               </div>
+               <div class="card-footer">
+                  <p class="card-footer__precio">$ 7879</p>
+                  <a href="#" class="card-footer__btn btn btn-primary">Comprar</a>
+               </div>
+            </div>
+         </div>
+
+         <div class="col-12 col-md-6 col-lg-4 col-xl-3 g-4 bg-success">
+            <div class="card mx-auto">
+               <img class="card-img-top" src="./img/bondiola_cerdo.jpg" alt="Card image cap">
+               <div class="card-body">
+                  <h5 class="card-title">Card title</h5>
+                  <p class="card-text">to build on the card title and make up the bulk of the
+                     card's
+                     content.</p>
+                  <a href="#" class="btn btn-primary">Go somewhere</a>
+               </div>
+            </div>
+         </div>
+
+         <div class="col-12 col-md-6 col-lg-4 col-xl-3 g-4 bg-info">
+            <div class="card mx-auto">
+               <a href="./img/milanesa_merluza.jpg">
+                  <img class="card-img-top" src="./img/milanesa_merluza.jpg" alt="Card image cap">
+               </a>
+               <div class="card-body">
+                  <h5 class="card-title">Card title</h5>
+                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                     card's
+                     content.</p>
+                  <a href="#" class="btn btn-primary">Go somewhere</a>
+               </div>
+            </div>
+         </div>
+
+         <div class="col-12 col-md-6 col-lg-4 col-xl-3 g-4 bg-success">
+            <div class="card mx-auto">
+               <img class="card-img-top" src="./img/bondiola_cerdo.jpg" alt="Card image cap">
+               <div class="card-body">
+                  <h5 class="card-title">Card title</h5>
+                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                     card's
+                     content.</p>
+                  <a href="#" class="btn btn-primary">Go somewhere</a>
+               </div>
+            </div>
+         </div> -->
+
+
+      </div>
+   </main>
+
+   <div class="toast-container position-fixed top-0 end-0 p-3">
+      <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="700">
+         <div class="toast-header">
+            <!-- <img src="..." class="rounded me-2" alt="..."> -->
+            <strong class="me-auto"></strong>
+            <!-- <small>11 mins ago</small> -->
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+         </div>
+         <div class="toast-body bg-marron p-3">
+            <strong id="toast-texto">Producto agregado...</strong>
+         </div>
+      </div>
+   </div>
+
+   <script src="./assets/bootstrap/bootstrap.bundle.min.js"></script>
+   <script src="./js/app.js"></script>
+</body>
+</html>
+
+
+<!-- 
+<div class="carrito__item" id="">
+   <div class="carrito__img">
+      <img class="img-fluid" src="../img/${item.producto.img}" alt="">
+   </div>
+   <div class="carrito__body">
+      <div class="carrito__titulo">
+         <h5>${item.producto.nombre}</h5>
+      </div>
+      <div class="carrito__botones">
+         <div class="carrito__cantidad">
+            <button class="btn btn-sm btn-cantidad" data-id="${item.id}" data-operacion="-"><i
+                  class="fa-solid fa-minus"></i></button>
+            <span class="px-2" id="cant-${item.id}">${item.cantidad}</span>
+            <button class="btn btn-sm btn-cantidad" data-id="${item.id}" data-operacion="+"><i
+                  class="fa-solid fa-plus"></i></button>
+         </div>
+         <div class="carrito__precio">
+            <span class="fw-bold">$ ${item.producto.precio}</span>
+         </div>
+         <div class="carrito__otros">
+            <button class="btn btn-sm text-danger btn-borrar" data-id="${item.id}"><i
+                  class="fa-solid fa-trash-can"></i></button>
+            <button class="btn btn-sm text-primary"><i class="fa-regular fa-square-plus"></i></i></button>
+         </div>
+      </div>
+   </div>
+</div> -->
