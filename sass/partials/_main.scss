@@ -4,12 +4,17 @@
   }
   .card-footer {
     display: flex;
-    justify-content: space-between;
+
     &__precio {
       margin: auto;
       margin-left: 0;
       font-size: 1.5rem;
       font-weight: bold;
+    }
+    &__medida {
+      display: block;
+      margin: auto;
+      border-radius: 0.2rem;
     }
   }
   img.card-img-top {
@@ -21,6 +26,10 @@
 
 @media (width >= 768px) {
   #main {
+    .card-footer {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
     img.card-img-top {
       height: 12rem;
     } /* img */

@@ -129,13 +129,17 @@
 }
 #main .card-footer {
   display: flex;
-  justify-content: space-between;
 }
 #main .card-footer__precio {
   margin: auto;
   margin-left: 0;
   font-size: 1.5rem;
   font-weight: bold;
+}
+#main .card-footer__medida {
+  display: block;
+  margin: auto;
+  border-radius: 0.2rem;
 }
 #main img.card-img-top {
   height: 18rem;
@@ -146,6 +150,10 @@
 @media (width >= 768px) {
   #main {
     /* img */
+  }
+  #main .card-footer {
+    flex-wrap: wrap;
+    justify-content: center;
   }
   #main img.card-img-top {
     height: 12rem;
@@ -216,15 +224,15 @@
   }
   .carrito__item .carrito__img img {
     display: block;
-    height: 6rem;
+    height: 100%;
   }
 }
 @media (width >= 992px) {
+  .carrito__item {
+    margin: 1.5rem;
+  }
   .carrito__item .carrito__botones {
     column-gap: 0.6rem;
-  }
-  .carrito__item .carrito__img img {
-    height: 3.6rem;
   }
   .carrito__item .carrito__body {
     flex-direction: row;

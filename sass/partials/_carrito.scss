@@ -73,7 +73,8 @@
       // align-self: center;
       img {
         display: block;
-        height: 6rem;
+        height: 100%;
+        // height: 6rem;
         // min-width: 100%;
         // object-fit: cover;
         // object-position: center;
@@ -84,12 +85,13 @@
 
 @media (width >= 992px) {
   .carrito__item {
+    margin: 1.5rem;
     .carrito__botones {
       column-gap: 0.6rem;
     }
     .carrito__img {
       img {
-        height: 3.6rem;
+        // height: 3.6rem;
       }
     }
     .carrito__body {

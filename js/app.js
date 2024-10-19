@@ -67,29 +67,51 @@ function agregarEventoAchkCategoria() {
       cargarProductos(productosPorCategoria(categorias));
       /* Agregar Evento a Btn Comprar */
       agregarEventoBtnComprar();
+      /* Agregar Evento a Combo Medidas */
+      agregarEventoCombosMedidas();
     });
   });
 }
 
 /* === P R O D U C T O S === */
-const PRODUCTO = function (id, nombre, detalle, precio, img, categoria_id) {
+const PRODUCTO = function (id, nombre, detalle, precio, img, categoria_id, precios = [], medida = "") {
   this.id = id;
   this.nombre = nombre;
   this.detalle = detalle;
+  this.medida = medida;
   this.precio = precio;
+  this.precios = precios;
   this.img = img;
   this.categoria_id = categoria_id;
 };
 
-/* Creando Productos */
+/* Crear Productos */
 const PRODUCTOS = [
-  new PRODUCTO(1, "Empanada de CARNE", "1/2 doc $ 6000, Unidad $ 1000", 12000, "empanadas.jpg", 1),
-  new PRODUCTO(2, "Empanada de POLLO", "1/2 doc $ 6000, Unidad $ 1000", 12000, "empanada_pollo.jpg", 1),
-  new PRODUCTO(3, "Empanada de JAMÓN y QUESO", "1/2 doc $ 6000, Unidad $ 1000", 12000, "empanada_jamon_queso.jpg", 1),
+  new PRODUCTO(1, "Empanada de CARNE", "1/2 doc $ 6000, Unidad $ 1000", 12000, "empanadas.jpg", 1, [
+    { id: 1, medida: "Doc", info: "Por docena", precio: 12000 },
+    { id: 2, medida: "1/2 Doc", info: "Por 1/2 docena", precio: 6000 },
+    { id: 3, medida: "Unidad", info: "Por unidad", precio: 1200 },
+  ]),
+  new PRODUCTO(2, "Empanada de POLLO", "1/2 doc $ 6000, Unidad $ 1000", 12000, "empanada_pollo.jpg", 1, [
+    { id: 1, medida: "Doc", info: "Por docena", precio: 12000 },
+    { id: 2, medida: "1/2 Doc", info: "Por 1/2 docena", precio: 6000 },
+    { id: 3, medida: "Unidad", info: "Por unidad", precio: 1200 },
+  ]),
+  new PRODUCTO(3, "Empanada de JAMÓN y QUESO", "1/2 doc $ 6000, Unidad $ 1000", 12000, "empanada_jamon_queso.jpg", 1, [
+    { id: 1, medida: "Doc", info: "Por docena", precio: 12000 },
+    { id: 2, medida: "1/2 Doc", info: "Por 1/2 docena", precio: 6000 },
+    { id: 3, medida: "Unidad", info: "Por unidad", precio: 1200 },
+  ]),
   new PRODUCTO(4, "Empanada de ÁRABES", "(*) Solo día Jueves", 12000, "empanada_arabe.jpg", 1),
   /* Categoria 2 */
-  new PRODUCTO(10, "Papa fritas BASTÓN", "Porción chica $ 2500", 5000, "papas_fritas.jpeg", 2),
-  new PRODUCTO(11, "Papa NOISE", "Porción chica $ 3000", 6000, "papas_noisette.jpg", 2),
+  new PRODUCTO(10, "Papa fritas BASTÓN", "Porción chica $ 2500", 5000, "papas_fritas.jpeg", 2, [
+    { id: 1, medida: "Grande", info: "Porción Grande", precio: 5000 },
+    { id: 2, medida: "Chica", info: "Porción Chica", precio: 2500 },
+  ]),
+  new PRODUCTO(11, "Papa NOISE", "Porción chica $ 3000", 6000, "papas_noisette.jpg", 2, [
+    { id: 1, medida: "Grande", info: "Porción Grande", precio: 5000 },
+    { id: 2, medida: "Chica", info: "Porción Chica", precio: 2500 },
+  ]),
   /* Categoria 3 */
   new PRODUCTO(15, "Milanesa con guarnición", "", 7500, "milanesa_ensalada_mix.jpg", 3),
   new PRODUCTO(16, "Milanesa napolitana con guarnición", "", 9000, "milanesa_napolitana2.jpg", 3),
@@ -112,7 +134,10 @@ const PRODUCTOS = [
   new PRODUCTO(38, "Cazuela de mondongo y garbanzo", "", 6000, "cazuela_mondongo.jpg", 4),
   new PRODUCTO(39, "Arroz con salsa bolognesa", "", 6000, "arroz_salsa_bolognesa.jpg", 4),
   /* Categoria 5 */
-  new PRODUCTO(45, "Pizza Mozzarella", "", 10000, "default.jpg", 5),
+  new PRODUCTO(45, "Pizza Mozzarella", "", 10000, "default.jpg", 5, [
+    { id: 1, medida: "", info: "", precio: 12000 },
+    { id: 2, medida: "1/2", info: "1/2 Pizza", precio: 6000 },
+  ]),
   new PRODUCTO(46, "Pizza Mozzarella con 4 huevos fritos", "", 12000, "default.jpg", 5),
   new PRODUCTO(47, "Pizza Mozzarella con atún", "", 12000, "default.jpg", 5),
   new PRODUCTO(48, "Pizza Especial de jamón y queso con morrón", "", 12000, "default.jpg", 5),
@@ -138,24 +163,16 @@ const PRODUCTOS = [
   /* Categoria 7 */
   new PRODUCTO(70, "Hamburguesa Simple", "Tomate y lechuga", 6000, "hamburguesa_simple.jpg", 7),
   new PRODUCTO(71, "Hamburguesa Simple JyQ", "Jamón y queso", 6000, "default.jpg", 7),
-  new PRODUCTO(
-    72,
-    "Hamburguesa Completa",
-    "Lechuga, tomate, jamón, queso y huevo planchado, SIN PAPAS",
-    7000,
-    "default.jpg",
-    7
-  ),
-  new PRODUCTO(
-    73,
-    "Hamburguesa Completa",
-    "Lechuga, tomate, jamón, queso y huevo planchado, CON PAPAS",
-    7500,
-    "default.jpg",
-    7
-  ),
-  new PRODUCTO(74, "Hamburguesa Completa DOBLE", "SIN PAPAS", 11000, "default.jpg", 7),
-  new PRODUCTO(75, "Hamburguesa Completa DOBLE", "CON PAPAS", 11500, "default.jpg", 7),
+  new PRODUCTO(72, "Hamburguesa Completa", "Lechuga, tomate, jamón, queso y huevo planchado", 7000, "default.jpg", 7, [
+    { id: 1, medida: "Con papas", info: "Con papas", precio: 7500 },
+    { id: 2, medida: "Sin papas", info: "Sin papas", precio: 7000 },
+  ]),
+
+  new PRODUCTO(74, "Hamburguesa Completa DOBLE", "", 11500, "default.jpg", 7, [
+    { id: 1, medida: "Con papas", info: "Con papas", precio: 11500 },
+    { id: 2, medida: "Sin papas", info: "Sin papas", precio: 11000 },
+  ]),
+
   /* Categoria 8 */
 ];
 
@@ -193,7 +210,10 @@ function cargarProductos(arrProductos = PRODUCTOS) {
                               <p class="card-text">${prod.detalle}</p>
                             </div>
                             <div class="card-footer">
-                              <p class="card-footer__precio">$ ${prod.precio}</p>
+                              <p class="card-footer__precio" id="precio-${prod.id}">$ ${prod.precio}</p>
+                              
+                              ${getMedidasDelProducto(prod)}
+
                               <a href="#" class="card-footer__btn btn text-marron btn-comprar" data-idProd="${prod.id}">
                                 <i class="fa-solid fa-2xl fa-basket-shopping"></i>
                               </a>
@@ -212,6 +232,15 @@ function productosPorCategoria(idCategorias) {
 
 function getProductoPorID(idProd) {
   return PRODUCTOS.find((p) => p.id == idProd);
+}
+
+function getMedidasDelProducto(prod) {
+  if (prod.precios.length == 0) return "";
+  let select = `<select class="card-footer__medida cbo-medida" id="medida-${prod.id}" data-idProd="${prod.id}">`;
+  prod.precios.forEach((p) => {
+    select += `<option value="${p.id}">${p.medida}</option>`;
+  });
+  return (select += `</select>`);
 }
 
 /* === H E R R A M I E N T A S === */
@@ -239,28 +268,67 @@ function agregarEventoBtnComprar() {
     btn.addEventListener("click", (e) => {
       e.preventDefault();
       let idProd = btn.getAttribute("data-idProd");
+
       agregarProductoAlCarrito(idProd);
     });
   });
 }
 
+/* Detectando CHANGE combo medidas */
+let combosMedida;
+function agregarEventoCombosMedidas() {
+  combosMedida = document.querySelectorAll(".cbo-medida").forEach((cbo, index) => {
+    cbo.addEventListener("change", (e) => {
+      let prod = getProductoPorID(cbo.getAttribute("data-idProd"));
+      let objPrecio = getPrecioPorIDSeleccionado(prod, cbo.value);
+      /* cambia en el html el precio, de acuerdo a seleccionado en el combo*/
+      document.getElementById(`precio-${prod.id}`).textContent = `$ ${objPrecio.precio}`;
+    });
+  });
+}
+
+/* Retorna el objeto precio buscado por idPrecio del producto */
+function getPrecioPorIDSeleccionado(prod, idPrecio) {
+  return prod.precios.find((p) => p.id == idPrecio);
+}
+
 /* Agregando producto por ID */
 function agregarProductoAlCarrito(idProd) {
-  /* Si ya existe el producto en el carrito RETORNA */
-  if (buscarProductoEnCarrito(idProd)) return;
+  /* Actualizar obj Producto según tipo de medida y precio */
+  let producto = actualizarProductoSegunMedidaSeleccionada(idProd);
 
-  let producto = getProductoPorID(idProd);
+  /* Si ya existe el producto en el carrito RETORNA */
+  if (buscarProductoEnCarrito(producto)) return;
+
+  // let producto = getProductoPorID(idProd);
   if (producto) CARRITO.push(new PRODUCTO_CARRITO(producto));
   mostrarToast();
   actualizarCantidadCarrito();
   setCarritoEnLocalStorage();
 }
+/* Recibe y retorna un obj producto, modifica precio y medida según seleccion de usuario */
+function actualizarProductoSegunMedidaSeleccionada(idProd) {
+  let producto = getProductoPorID(idProd);
+  let cbo = document.getElementById(`medida-${idProd}`);
+
+  if (producto.precios.length) {
+    let objPrecio = getPrecioPorIDSeleccionado(producto, cbo.value);
+    producto.precio = objPrecio.precio;
+    producto.medida = objPrecio.info;
+  }
+  /* Averiguar porque es necesario crear un nuevo obj,
+    si solo modifico el que recibe, tambien se modifica en el array carrito.  
+  */
+
+  /* spread operator, para hacer copia del objeto */
+  return { ...producto };
+}
 
 /* Buscar producto en Carrito - Evitar Duplicado */
-function buscarProductoEnCarrito(idProd) {
-  let resultado = CARRITO.find((prod) => prod.producto.id == idProd);
-  return !resultado ? false : true;
+function buscarProductoEnCarrito(producto) {
+  return CARRITO.find((item) => item.producto.id == producto.id && item.producto.precio == producto.precio);
 }
+
 /* Actualizar valor del Carrito */
 let cantidad_carrito = document.getElementById("carrito-cantidad");
 function actualizarCantidadCarrito() {

@@ -33,6 +33,8 @@ function cargarProductosDelCarrito() {
 
   CARRITO.forEach((item, index) => {
     let bgLight2 = index == 0 || index % 2 == 0 ? "bg-light2" : "";
+    let formatoProducto = getEtiquetaFormatoProducto(item.producto.medida);
+
     item_carrito += `
         <div class="carrito__item ${bgLight2}" id="item-${item.id}">
             <div class="carrito__img">
@@ -41,6 +43,7 @@ function cargarProductosDelCarrito() {
             <div class="carrito__body">
                 <div class="carrito__titulo">
                     <h5>${item.producto.nombre}</h5>
+                    ${formatoProducto}
                 </div>
                 <div class="carrito__botones">
                     <div class="carrito__cantidad">
@@ -87,6 +90,14 @@ function agregarEventoBotonesCantidad() {
   });
 }
 
+/* Retorna etiqueta small si el producto tiene mas de una unidad de medida */
+function getEtiquetaFormatoProducto(formato) {
+  if (formato != "") {
+    return `<strong class="text-danger">(*) ${formato}</strong>`;
+  }
+  return "";
+}
+
 /* Actualizar cantidad del producto comprado */
 function actualizarCantidadProductoComprado(idItem, operacion) {
   CARRITO.find((item, index) => {
@@ -114,14 +125,17 @@ function agregarEventoBotonesBorrar() {
   btnBorrar = document.querySelectorAll(".btn-borrar");
   btnBorrar.forEach((btn, index) => {
     btn.addEventListener("click", (e) => {
-      borrarProuctoDelCarrito(btn.getAttribute("data-id"), index);
+      borrarProuctoDelCarrito(btn.getAttribute("data-id"));
     });
   });
 }
 
-function borrarProuctoDelCarrito(idItem, index) {
+function borrarProuctoDelCarrito(idItem) {
+  let index = CARRITO.findIndex((item) => item.id == idItem);
+
   CARRITO.splice(index, 1);
   document.getElementById(`item-${idItem}`).remove();
+
   setCarritoEnLocalStorage();
 }
 
