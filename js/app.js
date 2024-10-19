@@ -32,6 +32,9 @@ function cargarCategorias() {
                          </div>`;
     NAVBAR_CONTENEDOR.appendChild(LiNavItem);
   });
+
+  /* Agrega evento a las categorias cargadas en el html */
+  agregarEventoAchkCategoria();
 }
 
 function ordenarCategoriasPorNombre(array, orden = "ASC") {
@@ -40,9 +43,7 @@ function ordenarCategoriasPorNombre(array, orden = "ASC") {
   return array.sort((a, b) => a.nombre.localeCompare(b.nombre));
 }
 
-function getCategoriaDeProducto() {}
-
-/* Retornar IDS de Categorias seleccionadas */
+/* Retornar array de IDS de Categorias seleccionadas */
 function categoriasSeleccionadas() {
   let catSelected = document.querySelectorAll("input[type='checkbox']:checked");
   let idCategorias = [];
@@ -54,8 +55,6 @@ function categoriasSeleccionadas() {
 
 /* CheckBox Categorias */
 let chksCategoria;
-// const CHK_CATEGORIA = document.querySelectorAll("input[type='checkbox'].check-categoria");
-
 function agregarEventoAchkCategoria() {
   chksCategoria = document.querySelectorAll("input[type='checkbox'].check-categoria");
 
@@ -65,10 +64,6 @@ function agregarEventoAchkCategoria() {
       let categorias = categoriasSeleccionadas();
       /* Seleccionar Productos según categoria */
       cargarProductos(productosPorCategoria(categorias));
-      /* Agregar Evento a Btn Comprar */
-      agregarEventoBtnComprar();
-      /* Agregar Evento a Combo Medidas */
-      agregarEventoCombosMedidas();
     });
   });
 }
@@ -87,7 +82,7 @@ const PRODUCTO = function (id, nombre, detalle, precio, img, categoria_id, preci
 
 /* Crear Productos */
 const PRODUCTOS = [
-  new PRODUCTO(1, "Empanada de CARNE", "1/2 doc $ 6000, Unidad $ 1000", 12000, "empanadas.jpg", 1, [
+  new PRODUCTO(1, "Empanada de CARNE", "1/2 doc $ 6000, Unidad $ 1000", 12000, "empanadas.jpg", 10, [
     { id: 1, medida: "Doc", info: "Por docena", precio: 12000 },
     { id: 2, medida: "1/2 Doc", info: "Por 1/2 docena", precio: 6000 },
     { id: 3, medida: "Unidad", info: "Por unidad", precio: 1200 },
@@ -108,7 +103,7 @@ const PRODUCTOS = [
     { id: 1, medida: "Grande", info: "Porción Grande", precio: 5000 },
     { id: 2, medida: "Chica", info: "Porción Chica", precio: 2500 },
   ]),
-  new PRODUCTO(11, "Papa NOISE", "Porción chica $ 3000", 6000, "papas_noisette.jpg", 2, [
+  new PRODUCTO(11, "Papa NOISE", "Porción chica $ 3000", 6000, "papas_noisette.jpg", 10, [
     { id: 1, medida: "Grande", info: "Porción Grande", precio: 5000 },
     { id: 2, medida: "Chica", info: "Porción Chica", precio: 2500 },
   ]),
@@ -132,9 +127,9 @@ const PRODUCTOS = [
   new PRODUCTO(36, "Guiso de lentejas", "", 6000, "guiso_lentejas.jpg", 4),
   new PRODUCTO(37, "Guiso de garbanzos", "", 6000, "guiso_garbanzos.jpg", 4),
   new PRODUCTO(38, "Cazuela de mondongo y garbanzo", "", 6000, "cazuela_mondongo.jpg", 4),
-  new PRODUCTO(39, "Arroz con salsa bolognesa", "", 6000, "arroz_salsa_bolognesa.jpg", 4),
+  new PRODUCTO(39, "Arroz con salsa bolognesa", "", 6000, "arroz_salsa_bolognesa.jpg", 10),
   /* Categoria 5 */
-  new PRODUCTO(45, "Pizza Mozzarella", "", 10000, "default.jpg", 5, [
+  new PRODUCTO(45, "Pizza Mozzarella", "", 10000, "default.jpg", 10, [
     { id: 1, medida: "", info: "", precio: 12000 },
     { id: 2, medida: "1/2", info: "1/2 Pizza", precio: 6000 },
   ]),
@@ -179,7 +174,7 @@ const PRODUCTOS = [
 /* Cargar Productos */
 const ROW_PRODUCTOS = document.getElementById("row-productos");
 
-function cargarProductos(arrProductos = PRODUCTOS) {
+function cargarProductos(arrProductos = []) {
   ROW_PRODUCTOS.innerHTML = "";
 
   /* Cuando NO tiene datos el arreglo */
@@ -214,7 +209,7 @@ function cargarProductos(arrProductos = PRODUCTOS) {
                               
                               ${getMedidasDelProducto(prod)}
 
-                              <a href="#" class="card-footer__btn btn text-marron btn-comprar" data-idProd="${prod.id}">
+                              <a href="#" class="card-footer__btn btn text-marron btn-comprar" data-id="${prod.id}">
                                 <i class="fa-solid fa-2xl fa-basket-shopping"></i>
                               </a>
                             </div>
@@ -223,6 +218,10 @@ function cargarProductos(arrProductos = PRODUCTOS) {
 
     ROW_PRODUCTOS.appendChild(colProd);
   });
+
+  /* Agregar evento a los botones de comprar y combo select medida */
+  agregarEventoBtnComprar();
+  agregarEventoCombosMedidas();
 }
 
 function productosPorCategoria(idCategorias) {
@@ -236,7 +235,7 @@ function getProductoPorID(idProd) {
 
 function getMedidasDelProducto(prod) {
   if (prod.precios.length == 0) return "";
-  let select = `<select class="card-footer__medida cbo-medida" id="medida-${prod.id}" data-idProd="${prod.id}">`;
+  let select = `<select class="card-footer__medida cbo-medida" id="medida-${prod.id}" data-id="${prod.id}">`;
   prod.precios.forEach((p) => {
     select += `<option value="${p.id}">${p.medida}</option>`;
   });
@@ -267,7 +266,7 @@ function agregarEventoBtnComprar() {
   btnComprar.forEach((btn) => {
     btn.addEventListener("click", (e) => {
       e.preventDefault();
-      let idProd = btn.getAttribute("data-idProd");
+      let idProd = btn.getAttribute("data-id");
 
       agregarProductoAlCarrito(idProd);
     });
@@ -279,7 +278,7 @@ let combosMedida;
 function agregarEventoCombosMedidas() {
   combosMedida = document.querySelectorAll(".cbo-medida").forEach((cbo, index) => {
     cbo.addEventListener("change", (e) => {
-      let prod = getProductoPorID(cbo.getAttribute("data-idProd"));
+      let prod = getProductoPorID(cbo.getAttribute("data-id"));
       let objPrecio = getPrecioPorIDSeleccionado(prod, cbo.value);
       /* cambia en el html el precio, de acuerdo a seleccionado en el combo*/
       document.getElementById(`precio-${prod.id}`).textContent = `$ ${objPrecio.precio}`;
@@ -300,8 +299,9 @@ function agregarProductoAlCarrito(idProd) {
   /* Si ya existe el producto en el carrito RETORNA */
   if (buscarProductoEnCarrito(producto)) return;
 
-  // let producto = getProductoPorID(idProd);
+  /* Agrega el producto al carrito */
   if (producto) CARRITO.push(new PRODUCTO_CARRITO(producto));
+  /* Actualiza informacion relacionada a la compra */
   mostrarToast();
   actualizarCantidadCarrito();
   setCarritoEnLocalStorage();
@@ -333,7 +333,6 @@ function buscarProductoEnCarrito(producto) {
 let cantidad_carrito = document.getElementById("carrito-cantidad");
 function actualizarCantidadCarrito() {
   cantidad_carrito.textContent = CARRITO.length;
-  // localStorageSetCarrito();
 }
 
 function mostrarToast(texto = "Producto agregado ...") {
@@ -358,17 +357,21 @@ function getCarritoDesdeLocalStorage() {
 
 function eliminarCarritoEnLocalStorage() {
   localStorage.removeItem("carrito");
-  // actualizarCantidadCarrito();
 }
 
 /* === I N I C I O    D E L    S I S T E M A === */
 function inicializacion() {
   ordenarCategoriasPorNombre(CATEGORIAS);
   cargarCategorias();
-  agregarEventoAchkCategoria();
-  cargarProductos(new Array());
+
+  /* En este método se puede especificar que categoria se carga por defecto,
+  si se pasa un array vacio mostrara una imagen con el logo de la app.  
+  */
+  cargarProductos(productosPorCategoria([10]));
+
   getCarritoDesdeLocalStorage();
   actualizarCantidadCarrito();
 }
+
 // eliminarCarritoEnLocalStorage();
 inicializacion();
