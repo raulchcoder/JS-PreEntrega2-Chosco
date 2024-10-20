@@ -1,3 +1,16 @@
+/* === H E A D E R === */
+/* Definiendo y agregando evento al botón carrito, si está vacío NO lo abre */
+const BTN_CARRITO = document.getElementById("btn-carrito").addEventListener("click", abrirPaginaCarrito);
+function abrirPaginaCarrito(e) {
+  e.preventDefault();
+  if (CARRITO.length == 0) {
+    mostrarToast("El carrito aún está vacio", 1000, "bg-danger");
+    return;
+  }
+  /* Si el carrito tiene productos abre la página */
+  location.href = e.target.parentElement.href;
+}
+
 /* === C A T E G O R I A S === */
 const CATEGORIA = function (id, nombre) {
   this.id = id;
@@ -335,10 +348,14 @@ function actualizarCantidadCarrito() {
   cantidad_carrito.textContent = CARRITO.length;
 }
 
-function mostrarToast(texto = "Producto agregado ...") {
+function mostrarToast(texto = "Producto agregado ...", tiempoDelay = 700, bg_body = "") {
   const toastTexto = document.getElementById("toast-texto");
   toastTexto.textContent = texto;
   const toastLiveExample = document.getElementById("liveToast");
+  toastLiveExample.setAttribute("data-bs-delay", tiempoDelay);
+  if (bg_body != "") toastLiveExample.querySelector(".toast-body").classList.add(bg_body);
+  if (bg_body == "") toastLiveExample.querySelector(".toast-body").classList.remove("bg-danger");
+
   const toast = new bootstrap.Toast(toastLiveExample);
   toast.show();
 }
@@ -364,7 +381,7 @@ function inicializacion() {
   ordenarCategoriasPorNombre(CATEGORIAS);
   cargarCategorias();
 
-  /* En este método se puede especificar que categoria se carga por defecto,
+  /* En este función se puede especificar que categoria se carga por defecto,
   si se pasa un array vacio mostrara una imagen con el logo de la app.  
   */
   cargarProductos(productosPorCategoria([10]));

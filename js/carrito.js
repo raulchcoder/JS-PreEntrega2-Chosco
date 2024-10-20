@@ -1,8 +1,5 @@
 /* === C A R R I T O === */
-const PRODUCTO_CARRITO = function (producto, cantidad = 1) {
-  this.producto = producto;
-  this.cantidad = cantidad;
-};
+
 const CARRITO = [];
 
 function ordenarCarrito() {
@@ -22,7 +19,6 @@ function getCarritoDesdeLocalStorage() {
 
 function eliminarCarritoEnLocalStorage() {
   localStorage.removeItem("carrito");
-  // actualizarCantidadCarrito();
 }
 
 /* === P R O D U C T O S === */
@@ -67,21 +63,29 @@ function cargarProductosDelCarrito() {
                       </div>
                     </div>
                     <div class="carrito__quitar">
-                        <button class="btn btn-sm text-danger btn-borrar" data-id="${item.id}"><i class="fa-solid fa-xmark"></i></button>
+                        <button class="btn btn-sm text-danger btn-borrar" data-id="${item.id}">
+                          <i class="fa-solid fa-xmark"></i>
+                        </button>
                     </div>
                 </div>
             </div>
           </div>
         `;
   }); /* CARRITO */
+
   /* Agrega el contenido html a la columna productos */
   col_productos.innerHTML = item_carrito;
+
+  /* Agregando evento a los botones de cantidad y eliminar de los productos */
+  agregarEventoBotonesCantidad();
+  agregarEventoBotonesBorrar();
 }
 
+/* Agregando evento a los botones cantidad + o - */
 let btnCantidad;
 function agregarEventoBotonesCantidad() {
   btnCantidad = document.querySelectorAll(".btn-cantidad");
-  // btnCantidad = document.getElementsByClassName("btn-cantidad");
+
   btnCantidad.forEach((btn) => {
     btn.addEventListener("click", (e) => {
       /* llama a funcion para actualizar cantidad de producto, se pasa ID y Operacion a realizar */
@@ -90,7 +94,7 @@ function agregarEventoBotonesCantidad() {
   });
 }
 
-/* Retorna etiqueta small si el producto tiene mas de una unidad de medida */
+/* Retorna etiqueta strong si el producto tiene mas de un formato de venta */
 function getEtiquetaFormatoProducto(formato) {
   if (formato != "") {
     return `<strong class="text-danger">(*) ${formato}</strong>`;
@@ -114,12 +118,14 @@ function actualizarCantidadProductoComprado(idItem, operacion) {
 
       /* *** Guarda el CARRITO en localStorage */
       setCarritoEnLocalStorage();
-      // return item;
     }
   });
+
+  /* Actualizando TOTAL del carrito */
+  actualizarTotalCarrito();
 }
 
-/* Borrar producto de carrito */
+/* Agregando evento a los botones ELIMINAR item del carrito */
 let btnBorrar;
 function agregarEventoBotonesBorrar() {
   btnBorrar = document.querySelectorAll(".btn-borrar");
@@ -130,13 +136,39 @@ function agregarEventoBotonesBorrar() {
   });
 }
 
+/* Borrar producto de carrito */
 function borrarProuctoDelCarrito(idItem) {
   let index = CARRITO.findIndex((item) => item.id == idItem);
 
   CARRITO.splice(index, 1);
   document.getElementById(`item-${idItem}`).remove();
 
+  /* Actualizando TOTAL del carrito */
+  actualizarTotalCarrito();
+
   setCarritoEnLocalStorage();
+}
+
+/* Actualizando TOTAL del carrito */
+function actualizarTotalCarrito() {
+  if (CARRITO.length == 0) return;
+  let total = CARRITO.reduce((a, b) => a + b.subtotal, 0);
+  document.getElementById("total").textContent = total;
+}
+
+/* === BOTONES PAGAR, SEGUIR, VACIAR CARRITO === *
+/* Agregar evento al boton vaciar carrito */
+const BTN_VACIAR_CARRITO = document.getElementById("btn-vaciar").addEventListener("click", vaciarCarrito);
+function vaciarCarrito() {
+  // CARRITO.length = 0;
+  eliminarCarritoEnLocalStorage();
+  location.href = "../";
+}
+
+/* Agregar evento al boton vaciar carrito */
+const BTN_PAGAR = document.getElementById("btn-pagar").addEventListener("click", realizarElPago);
+function realizarElPago() {
+  console.log("Está listo para realizar el pago.");
 }
 
 /* === I N I C I A L I Z A C I O N === */
@@ -144,8 +176,7 @@ function inicializacionSistema() {
   getCarritoDesdeLocalStorage();
   ordenarCarrito();
   cargarProductosDelCarrito();
-  agregarEventoBotonesCantidad();
-  agregarEventoBotonesBorrar();
+  actualizarTotalCarrito();
 }
 
 window.onload = function () {
