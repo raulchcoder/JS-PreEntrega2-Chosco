@@ -165,12 +165,49 @@ function vaciarCarrito() {
   location.href = "../";
 }
 
-/* Agregar evento al boton vaciar carrito */
-const BTN_PAGAR = document.getElementById("btn-pagar").addEventListener("click", realizarElPago);
-function realizarElPago() {
-  console.log("Está listo para realizar el pago.");
+/* ==== P A G A R    O    E N C A R G A R ==== */
+/* Agregar evento al boton PAGAR */
+const BTN_PAGAR = document.getElementById("btn-pagar").addEventListener("click", (e) => {
+  e.preventDefault();
+  enviarPorWSP();
+});
+/* Prepara texto a enviar por la url a WSP, por el momento está sin el número cel */
+function enviarPorWSP() {
+  let numeroCel = "#";
+  let nPedido = Date.now();
+  let productos = "";
+
+  CARRITO.forEach((item) => {
+    if (item.producto.medida == "") {
+      productos += `${item.cantidad} ${item.producto.nombre}  *Precio:* $ ${item.producto.precio}  *Subtotal:* $ ${item.subtotal}%0a`;
+    } else {
+      /* Si el producto tiene un formato (1/2, unidad, etc) distinto al default, lo agrega en negrita */
+      let medida = item.producto.precios.find((pr) => pr.info == item.producto.medida).medida;
+      productos += `${item.cantidad} *${medida}* ${item.producto.nombre}  *Precio:* $ ${item.producto.precio}  *Subtotal:* $ ${item.subtotal}%0a`;
+    }
+  });
+
+  let total = document.getElementById("total").textContent;
+  let url = `https://wa.me/${numeroCel}?text=Pedido: *${nPedido}*%0a${productos}%0aTotal: *$ ${total}*`;
+
+  // window.open(url, "_blank").focus();
+
+  console.log(url);
+  mostrarToast("Enviando pedido ...", 2500, "bg-success");
+  setTimeout(() => vaciarCarrito(), 2900);
 }
 
+/* === H E R R A M I E N T A S === */
+function mostrarToast(texto = "Producto agregado ...", tiempoDelay = 700, bg_body = "bg-marron") {
+  const toastTexto = document.getElementById("toast-texto");
+  toastTexto.textContent = texto;
+  const toastLiveExample = document.getElementById("liveToast");
+  toastLiveExample.setAttribute("data-bs-delay", tiempoDelay);
+  toastLiveExample.querySelector(".toast-body").className = `toast-body p-3 text-white ${bg_body}`;
+
+  const toast = new bootstrap.Toast(toastLiveExample);
+  toast.show();
+}
 /* === I N I C I A L I Z A C I O N === */
 function inicializacionSistema() {
   getCarritoDesdeLocalStorage();
